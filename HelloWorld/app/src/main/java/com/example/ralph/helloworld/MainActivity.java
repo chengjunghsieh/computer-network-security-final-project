@@ -50,33 +50,24 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//      DownloadFiles();
-//      StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-//      StrictMode.setThreadPolicy(policy);
-//      downloadApp();
-
-/*
-        InstallApp atualizaApp = new InstallApp();
-        atualizaApp.setContext(getApplicationContext());
-        atualizaApp.execute("http://linux1.csie.org:9001/app-debug.apk");
-*/
+        downloadApp();
 
     }
 
     public void downloadApp() {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         String destination = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/";
-        String fileName = "AppName.apk";
+        String fileName = "ransome1.apk";
         destination += fileName;
         final Uri uri = Uri.parse("file://" + destination);
 
         //Delete update file if exists
         File file = new File(destination);
-        if (file.exists())
-            //file.delete() - test this, I think sometimes it doesnt work
-            file.delete();
 
         //get url of app on server
-        String url = "http://linux1.csie.org:9001/install.apk";
+        //String url = "https://www.csie.ntu.edu.tw/~b02902031/app/install.apk";
+        String url = "https://www.csie.ntu.edu.tw/~b02902027/app-release.apk";
 
         //set downloadmanager
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
@@ -107,11 +98,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void takePhoto() {
-        Intent intent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
-//        Intent intent = new Intent(MediaStore.INTENT_ACTION_STILL_IMAGE_CAMERA);
-
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         File photo = new File(Environment.getExternalStoragePublicDirectory( Environment.DIRECTORY_PICTURES),  "pic.jpg");
-//        Log.v("photo-path", Environment.getExternalStoragePublicDirectory( Environment.DIRECTORY_PICTURES).toString());
+        Log.v("photo-path", Environment.getExternalStoragePublicDirectory( Environment.DIRECTORY_PICTURES).toString());
         intent.putExtra(MediaStore.EXTRA_OUTPUT,
                 Uri.fromFile(photo));
         imageUri = Uri.fromFile(photo);
@@ -123,10 +112,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case TAKE_PICTURE:
-                Log.wtf("FFFDFD", "ACC:: herhehrherhasrasf");
-                finishActivity(0);
                 if (resultCode == Activity.RESULT_OK) {
-                    Log.wtf("ACC", "here here here");
                     Uri selectedImage = imageUri;
                     getContentResolver().notifyChange(selectedImage, null);
                     ImageView imageView = (ImageView) findViewById(R.id.imageView);
